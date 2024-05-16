@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Lista con Imágenes y Fuentes',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ItemListScreen(),
+    );
+  }
+}
+
+class Item {
+  final String name;
+  final String imageUrl;
+  final String category;
+
+  Item({required this.name, required this.imageUrl, required this.category});
+}
+
+class ItemListScreen extends StatelessWidget {
+  final List<Item> items = [
+    Item(name: 'Manzana', imageUrl: 'assets/images/apple.jpg', category: 'alimentos'),
+    Item(name: 'Perro', imageUrl: 'assets/images/dog.jpg', category: 'animales'),
+    Item(name: 'París', imageUrl: 'https://example.com/paris.jpg', category: 'lugares'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lista con Imágenes y Fuentes'),
+      ),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return ListTile(
+            leading: Image(
+              image: item.imageUrl.startsWith('http')
+                  ? NetworkImage(item.imageUrl)
+                  : AssetImage(item.imageUrl) as ImageProvider,
+            ),
+            title: Text(
+              item.name,
+              style: _getTextStyle(item.category),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  TextStyle _getTextStyle(String category) {
+    switch (category) {
+      case 'alimentos':
+        return GoogleFonts.openSans(fontSize: 18);
+      case 'animales':
+        return GoogleFonts.lato(fontSize: 18);
+      case 'lugares':
+        return GoogleFonts.ubuntu(fontSize: 18);
+      default:
+        return TextStyle(fontSize: 18);
+    }
+  }
+}
